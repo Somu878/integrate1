@@ -1,0 +1,22 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag somukandula/integrate1:$(date +%s)
+    - name: push image to docker hub
+      run: |
+          docker login -u somukandula -p ${{secrets.DOCKER_HUB_TOKEN}}
+          docker push somukandula/integrate1:$(date +%s)
